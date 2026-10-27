@@ -1,5 +1,6 @@
 package com.uam.asmemulator.instructions;
 
+import com.uam.asmemulator.cpu.Bits;
 import com.uam.asmemulator.cpu.Register;
 import com.uam.asmemulator.parser.AsmSyntaxException;
 import com.uam.asmemulator.parser.model.ImmediateOperand;
@@ -47,7 +48,7 @@ final class OperandRules {
                 }
             }
             case ImmediateOperand i -> {
-                if (!fits(i.value(), destination.bits())) {
+                if (!Bits.fits(i.value(), destination.bits())) {
                     throw error(p, "El valor %d no cabe en %s (%d bits)"
                             .formatted(i.value(), destination, destination.bits()));
                 }
@@ -79,15 +80,6 @@ final class OperandRules {
         return register;
     }
 
-    /** Acepta el rango con signo y sin signo del ancho (p. ej. -128..255 para 8 bits). */
-    static boolean fits(long value, int bits) {
-        if (bits == 64) {
-            return true;
-        }
-        long min = -(1L << (bits - 1));
-        long max = (1L << bits) - 1;
-        return value >= min && value <= max;
-    }
 
     static String describe(Operand operand) {
         return switch (operand) {
