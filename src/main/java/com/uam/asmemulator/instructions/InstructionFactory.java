@@ -53,6 +53,15 @@ public class InstructionFactory {
         binary("CMP", Cmp::new);
         binary("TEST", TestInstruction::new);
 
+        register("IMUL", (p, program) -> {
+            expectCount(p, 2);
+            Register d = destination(p);
+            if (d.bits() == 8) {
+                throw error(p, "IMUL de dos operandos no admite registros de 8 bits");
+            }
+            return new Imul(p, d, source(p, d));
+        });
+
         // Saltos
         register("JMP", (p, program) -> new Jump(p, jumpTarget(p, program)));
         ConditionalJump.MNEMONICS.forEach((mnemonic, condition) ->
