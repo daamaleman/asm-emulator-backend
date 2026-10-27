@@ -50,7 +50,7 @@ public enum Register {
 
     /** Máscara con los bits que ocupa esta vista (p. ej. 0xFF para AL). */
     public long mask() {
-        return bits == 64 ? -1L : (1L << bits) - 1;
+        return Bits.mask(bits);
     }
 
     /** Busca un registro por nombre, sin distinguir mayúsculas. */
