@@ -7,6 +7,7 @@ import com.uam.asmemulator.parser.model.LabelOperand;
 import com.uam.asmemulator.parser.model.Operand;
 import com.uam.asmemulator.parser.model.ParsedInstruction;
 import com.uam.asmemulator.parser.model.RegisterOperand;
+import com.uam.asmemulator.parser.model.Program;
 
 /**
  * Validaciones comunes de operandos, con mensajes claros para el estudiante.
@@ -55,6 +56,27 @@ final class OperandRules {
                     .formatted(l.name(), p.mnemonic()));
         }
         return operand;
+    }
+
+    /** El único operando debe ser una etiqueta; devuelve el índice destino. */
+    static int jumpTarget(ParsedInstruction p, Program program) {
+        expectCount(p, 1);
+        Operand operand = p.operands().get(0);
+        if (operand instanceof LabelOperand l) {
+            return program.addressOf(l.name());
+        }
+        throw error(p, "%s requiere una etiqueta como destino (se encontró %s)"
+                .formatted(p.mnemonic(), describe(operand)));
+    }
+
+    /** El primer operando debe ser un registro de 64 bits (PUSH/POP). */
+    static Register register64(ParsedInstruction p) {
+        Register register = destination(p);
+        if (register.bits() != 64) {
+            throw error(p, "%s solo admite registros de 64 bits (se encontró %s)"
+                    .formatted(p.mnemonic(), register));
+        }
+        return register;
     }
 
     /** Acepta el rango con signo y sin signo del ancho (p. ej. -128..255 para 8 bits). */
