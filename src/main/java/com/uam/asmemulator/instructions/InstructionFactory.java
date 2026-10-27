@@ -50,6 +50,20 @@ public class InstructionFactory {
         binary("CMP", Cmp::new);
         binary("TEST", TestInstruction::new);
 
+        register("PUSH", (p, program) -> {
+            expectCount(p, 1);
+            return new Push(p, p.operands().get(0));
+        });
+
+        register("POP", (p, program) -> {
+            expectCount(p, 1);
+            return new Pop(p, destination(p));
+        });
+
+        register("RET", (p, program) -> {
+            expectCount(p, 0);
+            return new Ret(p);
+        });
 
         register("IMUL", (p, program) -> {
             expectCount(p, 2);
