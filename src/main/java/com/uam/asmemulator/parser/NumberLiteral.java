@@ -6,12 +6,12 @@ import java.util.Locale;
  * Convierte literales numéricos: decimal (-3), hexadecimal (0x1F o 1Fh)
  * y binario (0b101).
  */
-final class NumberLiteral {
+public final class NumberLiteral {
 
     private NumberLiteral() {
     }
 
-    static long parse(String text, int line, int column) {
+    public static long parse(String text, int line, int column) {
         String t = text.toLowerCase(Locale.ROOT);
         boolean negative = t.startsWith("-");
         String digits = negative ? t.substring(1) : t;

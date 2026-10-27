@@ -28,4 +28,14 @@ public final class Bits {
     public static boolean signBit(long value, int bits) {
         return ((value >>> (bits - 1)) & 1L) == 1L;
     }
+
+    /** Indica si el valor cabe en el ancho, como número con signo o sin signo. */
+    public static boolean fits(long value, int bits) {
+        if (bits == 64) {
+            return true;
+        }
+        long min = -(1L << (bits - 1));
+        long max = (1L << bits) - 1;
+        return value >= min && value <= max;
+    }
 }

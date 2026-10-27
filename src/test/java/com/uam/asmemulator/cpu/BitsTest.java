@@ -24,4 +24,13 @@ class BitsTest {
         assertThat(Bits.signBit(0x8000_0000L, 32)).isTrue();
         assertThat(Bits.signBit(0x7FFF_FFFFL, 32)).isFalse();
     }
+
+    @Test
+    void checksSignedAndUnsignedRanges() {
+        assertThat(Bits.fits(255, 8)).isTrue();
+        assertThat(Bits.fits(-128, 8)).isTrue();
+        assertThat(Bits.fits(256, 8)).isFalse();
+        assertThat(Bits.fits(-129, 8)).isFalse();
+        assertThat(Bits.fits(Long.MIN_VALUE, 64)).isTrue();
+    }
 }
