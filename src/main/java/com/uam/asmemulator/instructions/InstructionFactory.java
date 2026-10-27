@@ -47,6 +47,9 @@ public class InstructionFactory {
         binary("AND", And::new);
         binary("OR", Or::new);
         binary("XOR", Xor::new);
+        binary("CMP", Cmp::new);
+        binary("TEST", TestInstruction::new);
+
 
         register("IMUL", (p, program) -> {
             expectCount(p, 2);
@@ -100,4 +103,3 @@ public class InstructionFactory {
         });
     }
 }
-
