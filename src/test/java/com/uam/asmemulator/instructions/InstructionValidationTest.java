@@ -65,5 +65,29 @@ class InstructionValidationTest {
     void exposesSupportedMnemonics() {
         assertThat(factory.supportedMnemonics()).contains("MOV", "ADD", "IMUL", "NOT");
     }
-}
 
+    @Test
+    void rejectsRegisterAsJumpTarget() {
+        assertThat(invalid("jmp eax").getMessage()).contains("etiqueta");
+    }
+
+    @Test
+    void rejectsNon64BitPush() {
+        assertThat(invalid("push eax").getMessage()).contains("64 bits");
+    }
+
+    @Test
+    void rejectsImmediateAsCompareLeftOperand() {
+        assertThat(invalid("cmp 5, eax").getMessage()).contains("registro");
+    }
+
+    @Test
+    void rejectsRetWithOperands() {
+        assertThat(invalid("ret eax").getMessage()).contains("0 operandos");
+    }
+
+    @Test
+    void supportsJumpAliases() {
+        assertThat(factory.supportedMnemonics()).contains("JC", "JNC", "JGE", "JZ", "JA", "CMP", "TEST");
+    }
+}
